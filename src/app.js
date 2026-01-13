@@ -23,27 +23,46 @@ function generateContainerId() {
 function testContainer() {
     const resultBox = document.getElementById('result');
     const statusElement = document.getElementById('status');
-    
+    const containerId = document.getElementById('container-id').textContent;
+
     statusElement.textContent = 'Test en cours...';
     statusElement.style.color = '#EA580C';
-    
+
     setTimeout(() => {
         statusElement.textContent = 'Container opérationnel';
         statusElement.style.color = '#16A34A';
-        
-        resultBox.innerHTML = `
-            <strong>Test du Container Réussi</strong><br><br>
-            docker ps<br>
-            CONTAINER ID   IMAGE                                    STATUS<br>
-            ${document.getElementById('container-id').textContent}      ghcr.io/user/devops-tp-docker:latest   Up 5 minutes<br><br>
-            - Serveur Nginx : OK<br>
-            - Application Web : OK<br>
-            - Port 80 : LISTENING<br>
-            - Health Check : PASSED
-        `;
+
+        // Reset du contenu
+        resultBox.textContent = '';
         resultBox.className = 'result-box success';
+
+        // Titre
+        const title = document.createElement('strong');
+        title.textContent = 'Test du Container Réussi';
+        resultBox.appendChild(title);
+        resultBox.appendChild(document.createElement('br'));
+        resultBox.appendChild(document.createElement('br'));
+
+        // Contenu type "console"
+        const lines = [
+            'docker ps',
+            'CONTAINER ID   IMAGE                                    STATUS',
+            `${containerId}      ghcr.io/user/devops-tp-docker:latest   Up 5 minutes`,
+            '',
+            '- Serveur Nginx : OK',
+            '- Application Web : OK',
+            '- Port 80 : LISTENING',
+            '- Health Check : PASSED'
+        ];
+
+        lines.forEach(line => {
+            const div = document.createElement('div');
+            div.textContent = line;
+            resultBox.appendChild(div);
+        });
+
     }, 1500);
-}
+}        
 
 document.addEventListener('DOMContentLoaded', function() {
     updateTimestamp();
